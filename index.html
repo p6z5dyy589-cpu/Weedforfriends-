@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Weed for Friends – eine 3D-Community-Erlebnisseite." />
+  <title>Weed for Friends · 3D</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <!-- 3D Canvas Hintergrund -->
+  <canvas id="scene"></canvas>
+
+  <!-- Lade-Overlay -->
+  <div id="loader">
+    <div class="leaf-spinner">🌿</div>
+    <p>Lade 3D-Szene…</p>
+  </div>
+
+  <!-- Navigation -->
+  <header class="nav">
+    <a href="#hero" class="brand">🌿 Weed<span>forFriends</span></a>
+    <nav>
+      <a href="#about">Über uns</a>
+      <a href="#features">Features</a>
+      <a href="#community">Community</a>
+    </nav>
+  </header>
+
+  <!-- Inhalt -->
+  <main>
+    <section id="hero" class="hero">
+      <h1>Willkommen bei<br><span class="grad">Weed for Friends</span></h1>
+      <p class="lead">Eine entspannte 3D-Community-Erlebnisseite. Bewege die Maus und scrolle, um die Szene zu erkunden.</p>
+      <div class="cta">
+        <a href="#about" class="btn btn-primary">Mehr entdecken</a>
+        <a href="#community" class="btn btn-ghost">Community beitreten</a>
+      </div>
+      <div class="scroll-hint">scroll ↓</div>
+    </section>
+
+    <section id="about" class="panel">
+      <div class="card">
+        <h2>Über uns</h2>
+        <p>Wir sind eine Community für Freunde, die Wert auf Qualität, Vertrauen und gemeinsames Erleben legen. Diese Seite zeigt, wie modernes 3D-Webdesign mit <strong>Three.js</strong> funktioniert.</p>
+      </div>
+    </section>
+
+    <section id="features" class="panel">
+      <h2 class="section-title">Features</h2>
+      <div class="grid">
+        <div class="feature">
+          <div class="icon">🧊</div>
+          <h3>Interaktives 3D</h3>
+          <p>Eine flüssige WebGL-Szene direkt im Browser – ganz ohne Plugins.</p>
+        </div>
+        <div class="feature">
+          <div class="icon">⚡</div>
+          <h3>Schnell &amp; leicht</h3>
+          <p>Optimiert für Performance auf Desktop und Mobilgeräten.</p>
+        </div>
+        <div class="feature">
+          <div class="icon">🎨</div>
+          <h3>Modernes Design</h3>
+          <p>Glassmorphism, Verläufe und sanfte Animationen.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="community" class="panel">
+      <div class="card">
+        <h2>Community</h2>
+        <p>Werde Teil der Bewegung. Diese Demo zeigt das Grundgerüst – hier könnten Anmeldung, Forum oder Events folgen.</p>
+        <a href="#hero" class="btn btn-primary">Nach oben</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>© <span id="year"></span> Weed for Friends · Erstellt mit Three.js &amp; ❤️</p>
+  </footer>
+
+  <!-- Three.js via Import Map (kein Build-Schritt nötig) -->
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+    }
+  }
+  </script>
+  <script type="module" src="./main.js"></script>
+</body>
+</html>
