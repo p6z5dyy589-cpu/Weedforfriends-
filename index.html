@@ -11,19 +11,16 @@
   <link rel="stylesheet" href="./styles.css" />
 </head>
 <body>
-  <!-- Fortschrittsbalken -->
   <div id="progress"></div>
 
-  <!-- Lade-Overlay -->
   <div id="loader">
     <div class="spinner"></div>
     <p>Lade Produkt…</p>
   </div>
 
-  <!-- Fixierte, transparente 3D-Bühne (Produkt schwebt über allem) -->
+  <!-- Fixierte, transparente 3D-Bühne (Produkt schwebt zentral) -->
   <div id="product-stage"></div>
 
-  <!-- Navigation -->
   <header class="nav">
     <a href="#top" class="brand">Northern <b>Lights</b></a>
     <nav>
@@ -34,15 +31,16 @@
     </nav>
   </header>
 
-  <!-- Scroll-Root: die gescrubte Timeline läuft über diesen Bereich -->
   <main id="scroll-root">
 
-    <!-- 0 · Hero (Produkt zentriert) -->
-    <section id="top" class="section center">
-      <div class="block reveal">
+    <!-- 0 · Hero -->
+    <section id="top" class="section">
+      <div class="callout c-top reveal">
         <p class="eyebrow">Premium Vape · Limited</p>
         <h1>Northern&nbsp;<span class="grad">Lights</span></h1>
-        <p class="lead">Ein Polarlicht für die Sinne. Scrolle — und das Produkt begleitet dich über die gesamte Seite.</p>
+      </div>
+      <div class="callout c-bottom reveal">
+        <p class="lead">Ein Polarlicht für die Sinne. Scrolle — das Produkt läuft mit dir durch die Seite.</p>
         <div class="cta">
           <a href="#buy" class="btn btn-primary">Jetzt sichern</a>
           <a href="#flavour" class="btn btn-ghost">Entdecken</a>
@@ -51,49 +49,47 @@
       <div class="scroll-hint">scroll ↓</div>
     </section>
 
-    <!-- 1 · Geschmack (Produkt links, Text rechts) -->
-    <section id="flavour" class="section right">
-      <div class="block reveal">
+    <!-- 1 · Geschmack — Infos rund ums Produkt -->
+    <section id="flavour" class="section">
+      <div class="callout c-tl reveal">
         <p class="eyebrow">Aroma</p>
         <h2>Kühle Beere,<br>klarer Abgang.</h2>
-        <p class="body">Eine ausbalancierte Komposition aus dunkler Waldbeere, einem Hauch Minze und kristallklarer Frische — inspiriert von langen Nächten unter dem Polarlicht.</p>
-        <div class="tags">
-          <span class="tag">Waldbeere</span>
-          <span class="tag">Eismint</span>
-          <span class="tag">Zedernholz</span>
-        </div>
       </div>
+      <div class="chip c-tr reveal">🫐 Waldbeere</div>
+      <div class="chip c-bl reveal">❄️ Eismint</div>
+      <div class="chip c-br reveal">🌲 Zedernholz</div>
     </section>
 
-    <!-- 2 · Technik (Produkt rechts, Text links) -->
-    <section id="tech" class="section left">
-      <div class="block reveal">
+    <!-- 2 · Technik — Stats rund ums Produkt -->
+    <section id="tech" class="section">
+      <div class="callout c-tr reveal">
         <p class="eyebrow">Technik</p>
         <h2>Durchdacht<br>bis ins Detail.</h2>
-        <p class="body">Keramik-Coil für reinen Geschmack, präzise Luftführung und ein versiegeltes Folienkissen, das Aroma und Frische bis zum letzten Zug bewahrt.</p>
-        <div class="stats">
-          <div class="stat"><div class="num">600+</div><div class="lbl">Züge</div></div>
-          <div class="stat"><div class="num">2 %</div><div class="lbl">Nikotin</div></div>
-          <div class="stat"><div class="num">100 %</div><div class="lbl">recycelbar</div></div>
-        </div>
       </div>
+      <div class="stat-card c-tl reveal"><div class="num">600+</div><div class="lbl">Züge</div></div>
+      <div class="stat-card c-bl reveal"><div class="num">2 %</div><div class="lbl">Nikotin</div></div>
+      <div class="stat-card c-br reveal"><div class="num">100 %</div><div class="lbl">recycelbar</div></div>
     </section>
 
-    <!-- 3 · Ritual (Produkt links, näher) -->
-    <section id="ritual" class="section right">
-      <div class="block reveal">
+    <!-- 3 · Ritual -->
+    <section id="ritual" class="section">
+      <div class="callout c-tl reveal">
         <p class="eyebrow">Ritual</p>
         <h2>Dein Moment,<br>in Bewegung.</h2>
-        <p class="body">Dreh es, betrachte es, spür die Wertigkeit. Das Produkt folgt deinem Scrollen — vom ersten Eindruck bis zur Entscheidung.</p>
-        <div class="card">„Wie ein Stück Nordlicht in der Hand." — <b>som&nbsp;review</b></div>
       </div>
+      <div class="callout c-br reveal">
+        <p class="body">Dreh es, betrachte es, spür die Wertigkeit — das Produkt folgt deinem Scrollen und deiner Maus.</p>
+      </div>
+      <div class="chip c-bl reveal">„Wie ein Stück Nordlicht." — som review</div>
     </section>
 
-    <!-- 4 · Kaufen (Produkt zentriert, groß) -->
-    <section id="buy" class="section center">
-      <div class="block reveal">
+    <!-- 4 · Kaufen -->
+    <section id="buy" class="section">
+      <div class="callout c-top reveal">
         <p class="eyebrow">Verfügbar</p>
         <h2>Hol dir das <span class="grad">Polarlicht</span>.</h2>
+      </div>
+      <div class="callout c-bottom reveal">
         <p class="lead">Limitierte Auflage. Solange der Vorrat reicht.</p>
         <div class="cta">
           <a href="#" class="btn btn-primary">In den Warenkorb · 12,90 €</a>
@@ -107,7 +103,6 @@
     <p>© <span id="year"></span> Northern Lights · 3D-Produkterlebnis mit Three.js &amp; GSAP ScrollTrigger</p>
   </footer>
 
-  <!-- Reihenfolge wichtig: THREE → Texturen → Produkt → GSAP → Choreografie -->
   <script src="./vendor/three/three.min.js"></script>
   <script src="./product-textures.js"></script>
   <script src="./product.js"></script>

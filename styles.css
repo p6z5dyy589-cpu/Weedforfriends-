@@ -6,7 +6,7 @@
   --aurora3: #b66cff;
   --text: #eef3ff;
   --muted: #9fb0d0;
-  --glass: rgba(18, 26, 54, 0.45);
+  --glass: rgba(18, 26, 54, 0.42);
   --glass-border: rgba(140, 170, 255, 0.22);
 }
 
@@ -24,8 +24,6 @@ body {
   overflow-x: hidden;
   line-height: 1.6;
 }
-
-/* Aurora-Schleier */
 body::before {
   content: "";
   position: fixed; inset: 0; z-index: 0; pointer-events: none;
@@ -35,14 +33,12 @@ body::before {
   mix-blend-mode: screen;
 }
 
-/* Fortschrittsbalken */
 #progress {
   position: fixed; top: 0; left: 0; height: 3px; width: 100%;
   transform: scaleX(0); transform-origin: 0 50%; z-index: 60;
   background: linear-gradient(90deg, var(--aurora1), var(--aurora2), var(--aurora3));
 }
 
-/* Loader */
 #loader {
   position: fixed; inset: 0; z-index: 100;
   display: flex; flex-direction: column; align-items: center; justify-content: center;
@@ -60,12 +56,9 @@ body::before {
 @keyframes spin { to { transform: rotate(360deg); } }
 
 /* Fixierte 3D-Bühne — transparent, hinter dem Inhalt */
-#product-stage {
-  position: fixed; inset: 0; z-index: 2; pointer-events: none;
-}
+#product-stage { position: fixed; inset: 0; z-index: 2; pointer-events: none; }
 #product-stage canvas { display: block; width: 100% !important; height: 100% !important; }
 
-/* Navigation */
 .nav {
   position: fixed; top: 0; left: 0; right: 0; z-index: 50;
   display: flex; align-items: center; justify-content: space-between;
@@ -79,56 +72,54 @@ body::before {
 .nav nav a { color: var(--muted); text-decoration: none; font-weight: 500; font-size: .92rem; transition: color .25s; }
 .nav nav a:hover { color: var(--text); }
 
-/* Scroll-Root + Sektionen */
+/* Scroll-Root + Sektionen: jede Sektion ist ein Positions-Rahmen,
+   in dem die Infos RUND UM das zentrale Produkt schweben. */
 #scroll-root { position: relative; z-index: 10; }
-.section {
-  min-height: 100vh;
-  display: flex; align-items: center;
-  padding: 6rem clamp(1.2rem, 6vw, 7rem);
-  position: relative;
-}
-.section.center { justify-content: center; text-align: center; }
-.section.left  { justify-content: flex-start; }
-.section.right { justify-content: flex-end; }
+.section { position: relative; min-height: 100vh; }
 
-/* Textblöcke */
-.block { max-width: 30rem; }
-.section.center .block { max-width: 46rem; }
+/* Allgemeines Callout */
+.callout {
+  position: absolute;
+  max-width: min(34vw, 30rem);
+  z-index: 12;
+}
+/* Positions-Anker rund um die Bildmitte */
+.c-top    { top: 16vh; left: 50%; transform: translateX(-50%); text-align: center; max-width: 46rem; }
+.c-bottom { bottom: 16vh; left: 50%; transform: translateX(-50%); text-align: center; max-width: 40rem; }
+.c-tl { top: 18vh; left: clamp(1.2rem, 6vw, 7rem); }
+.c-tr { top: 18vh; right: clamp(1.2rem, 6vw, 7rem); text-align: right; }
+.c-bl { bottom: 20vh; left: clamp(1.2rem, 6vw, 7rem); }
+.c-br { bottom: 20vh; right: clamp(1.2rem, 6vw, 7rem); text-align: right; }
+
 .eyebrow {
   text-transform: uppercase; letter-spacing: .28em; font-size: .72rem;
-  color: var(--aurora1); font-weight: 600; margin-bottom: 1rem;
+  color: var(--aurora1); font-weight: 600; margin-bottom: .8rem;
 }
-h1 {
-  font-size: clamp(2.6rem, 8vw, 6rem); font-weight: 800; line-height: 1.02;
-  letter-spacing: -0.02em;
-}
-h2 { font-size: clamp(2rem, 5vw, 3.4rem); font-weight: 800; line-height: 1.08; letter-spacing: -0.01em; }
+h1 { font-size: clamp(2.6rem, 8vw, 6rem); font-weight: 800; line-height: 1.02; letter-spacing: -0.02em; }
+h2 { font-size: clamp(1.8rem, 4.5vw, 3.2rem); font-weight: 800; line-height: 1.08; letter-spacing: -0.01em; }
 .grad {
   background: linear-gradient(110deg, var(--aurora1), var(--aurora2) 45%, var(--aurora3));
   -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
 }
-.lead { margin-top: 1.2rem; color: var(--muted); font-size: clamp(1rem, 1.6vw, 1.18rem); font-weight: 300; }
-p.body { margin-top: 1rem; color: var(--muted); font-weight: 300; }
+.lead { color: var(--muted); font-size: clamp(1rem, 1.6vw, 1.18rem); font-weight: 300; }
+p.body { color: var(--muted); font-weight: 300; }
 
-/* Glas-Karten / Stats */
-.card {
-  margin-top: 1.6rem; padding: 1.4rem 1.6rem;
+/* Schwebende Glas-Chips & Stat-Karten rund ums Produkt */
+.chip, .stat-card {
+  position: absolute; z-index: 12;
   background: var(--glass); border: 1px solid var(--glass-border);
-  border-radius: 20px; backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px); border-radius: 16px;
 }
-.stats { display: flex; gap: 1.8rem; margin-top: 1.8rem; flex-wrap: wrap; }
-.stat .num { font-size: 1.9rem; font-weight: 800; color: var(--text); }
-.stat .lbl { font-size: .78rem; color: var(--muted); text-transform: uppercase; letter-spacing: .1em; }
-
-.tags { display: flex; gap: .6rem; flex-wrap: wrap; margin-top: 1.4rem; }
-.tag {
-  padding: .45rem .9rem; border-radius: 999px; font-size: .82rem;
-  border: 1px solid var(--glass-border); background: var(--glass); color: var(--muted);
+.chip {
+  padding: .7rem 1.1rem; font-size: .95rem; font-weight: 500;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.25);
 }
+.stat-card { padding: 1rem 1.4rem; text-align: center; min-width: 7.5rem; }
+.stat-card .num { font-size: 1.9rem; font-weight: 800; color: var(--text); }
+.stat-card .lbl { font-size: .74rem; color: var(--muted); text-transform: uppercase; letter-spacing: .1em; }
 
 /* Buttons */
-.cta { margin-top: 2rem; display: flex; gap: 1rem; flex-wrap: wrap; }
-.section.center .cta { justify-content: center; }
+.cta { margin-top: 1.6rem; display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; }
 .btn {
   display: inline-block; padding: .9rem 1.9rem; border-radius: 999px;
   font-weight: 600; text-decoration: none; cursor: pointer;
@@ -145,7 +136,7 @@ p.body { margin-top: 1rem; color: var(--muted); font-weight: 300; }
 .scroll-hint {
   position: absolute; bottom: 2.2rem; left: 50%; transform: translateX(-50%);
   color: var(--muted); font-size: .78rem; letter-spacing: .22em; text-transform: uppercase;
-  animation: bob 1.8s ease-in-out infinite;
+  animation: bob 1.8s ease-in-out infinite; z-index: 12;
 }
 @keyframes bob { 0%,100% { transform: translate(-50%,0); } 50% { transform: translate(-50%,8px); } }
 
@@ -155,11 +146,13 @@ p.body { margin-top: 1rem; color: var(--muted); font-weight: 300; }
   background: rgba(5,8,18,0.7); backdrop-filter: blur(8px);
 }
 
-/* Auf kleinen Screens: Produkt tritt hinter den Text zurück */
-@media (max-width: 720px) {
-  .section { padding: 6rem 1.2rem; }
-  .section.left, .section.right { justify-content: center; text-align: center; }
-  .block { max-width: 100%; }
-  .stats { justify-content: center; }
+/* Mobil: Infos stapeln, Produkt tritt in den Hintergrund */
+@media (max-width: 760px) {
+  .section { display: flex; flex-direction: column; align-items: center; justify-content: space-between; padding: 7rem 1.2rem 5rem; gap: 1rem; }
+  .callout, .chip, .stat-card {
+    position: static; transform: none; text-align: center;
+    max-width: 90%; margin: 0 auto;
+  }
+  .c-tr, .c-br { text-align: center; }
   .nav nav { gap: .8rem; font-size: .82rem; }
 }

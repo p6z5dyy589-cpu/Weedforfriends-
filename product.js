@@ -119,9 +119,14 @@
     requestAnimationFrame(tick);
     NLV.mx += (NLV.mxT - NLV.mx) * 0.06;
     NLV.my += (NLV.myT - NLV.my) * 0.06;
-    const floatY = Math.sin(performance.now() * 0.0006) * 0.12;
-    product.position.set(NLV.posX, NLV.posY + floatY, NLV.posZ);
-    product.rotation.set(NLV.rotX + NLV.my * 0.12, NLV.rotY + NLV.mx * 0.22, 0);
+    const floatY = Math.sin(performance.now() * 0.0006) * 0.1;
+    // Maus bewegt das Produkt leicht in Position UND Rotation mit
+    product.position.set(
+      NLV.posX + NLV.mx * 0.45,
+      NLV.posY + floatY - NLV.my * 0.3,
+      NLV.posZ
+    );
+    product.rotation.set(NLV.rotX + NLV.my * 0.18, NLV.rotY + NLV.mx * 0.32, 0);
     product.scale.setScalar(NLV.scale);
     renderer.render(scene, camera);
   }

@@ -23,11 +23,11 @@ const NLV = window.NLV;
    das Produkt dreht sich kontinuierlich (rotY steigt),
    die Skalierung pulsiert für Nähe/Distanz.            */
 const KEYS = [
-  { posX: 0.0,  posY: 0.0,   posZ: 0.0, rotX: 0.05, rotY: 0.40, scale: 0.85 }, // 0 Hero – zentriert, frontal
-  { posX: -2.3, posY: 0.15,  posZ: 0.0, rotX: 0.12, rotY: -0.60, scale: 0.60 }, // 1 links, 3/4-Ansicht
-  { posX: 2.3,  posY: -0.2,  posZ: 0.3, rotX: 0.15, rotY: 3.14, scale: 0.60 }, // 2 rechts, Rückseite sichtbar
-  { posX: -1.7, posY: 0.25,  posZ: 1.2, rotX: 0.10, rotY: 5.83, scale: 0.72 }, // 3 links, näher, wieder frontal
-  { posX: 0.0,  posY: -0.35, posZ: 1.4, rotX: 0.05, rotY: 6.58, scale: 0.80 }, // 4 CTA – zentriert, etwas tiefer
+  { posX: 0.0,  posY: 0.0,  posZ: 0.0, rotX: 0.05, rotY: 0.30, scale: 0.58 }, // 0 Hero – zentriert
+  { posX: -0.7, posY: 0.10, posZ: 0.0, rotX: 0.10, rotY: -0.55, scale: 0.46 }, // 1 leicht links
+  { posX: 0.7,  posY: -0.1, posZ: 0.2, rotX: 0.13, rotY: 3.14, scale: 0.46 }, // 2 leicht rechts, Rückseite
+  { posX: -0.5, posY: 0.12, posZ: 0.6, rotX: 0.08, rotY: 5.83, scale: 0.52 }, // 3 links, etwas näher
+  { posX: 0.0,  posY: -0.05,posZ: 0.7, rotX: 0.05, rotY: 6.58, scale: 0.60 }, // 4 CTA – zentriert
 ];
 
 // Eine durchgehende, gescrubte Timeline über das gesamte Dokument.
