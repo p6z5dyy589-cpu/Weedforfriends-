@@ -14,6 +14,7 @@
     posX: 0, posY: 0, posZ: 0,
     rotX: 0.05, rotY: 0.4,
     scale: 0.85,
+    introScale: 1, // 0→1 Einblend-Faktor (von main.js animiert)
     // Maus-Parallax (Ziel + geglättet)
     mxT: 0, myT: 0, mx: 0, my: 0,
     ready: false,
@@ -127,7 +128,7 @@
       NLV.posZ
     );
     product.rotation.set(NLV.rotX + NLV.my * 0.18, NLV.rotY + NLV.mx * 0.32, 0);
-    product.scale.setScalar(NLV.scale);
+    product.scale.setScalar(NLV.scale * NLV.introScale);
     renderer.render(scene, camera);
   }
   tick();

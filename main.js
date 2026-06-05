@@ -64,20 +64,58 @@ for (let i = 1; i < KEYS.length; i++) {
   });
 }
 
-/* --- Inhaltliche Reveals pro Sektion ------------------------- */
-gsap.utils.toArray(".reveal").forEach((el) => {
-  gsap.from(el, {
-    opacity: 0,
-    y: 60,
-    duration: 0.9,
-    ease: "power2.out",
-    scrollTrigger: {
-      trigger: el,
-      start: "top 80%",
-      toggleActions: "play none none reverse",
-    },
+/* --- Hintergrund-Farbreise: Farbe wandert von Sektion zu Sektion --- */
+function setBg(color) {
+  gsap.to("#bg", { backgroundColor: color, duration: 1.1, ease: "power2.out", overwrite: "auto" });
+}
+gsap.utils.toArray(".section").forEach((sec) => {
+  const color = sec.dataset.bg;
+  if (!color) return;
+  ScrollTrigger.create({
+    trigger: sec,
+    start: "top center",
+    end: "bottom center",
+    onEnter: () => setBg(color),
+    onEnterBack: () => setBg(color),
   });
 });
+gsap.set("#bg", { backgroundColor: gsap.utils.toArray(".section")[0].dataset.bg });
+
+/* --- Maskierte Zeilen-Reveals für Überschriften -------------- */
+gsap.utils.toArray("h1, h2").forEach((h) => {
+  const parts = h.innerHTML.split(/<br\s*\/?>/i);
+  h.innerHTML = parts
+    .map((p) => `<span class="line-mask"><span class="line-inner">${p}</span></span>`)
+    .join("");
+  const lines = h.querySelectorAll(".line-inner");
+  gsap.set(lines, { yPercent: 115 });
+  gsap.to(lines, {
+    yPercent: 0,
+    duration: 1.0,
+    ease: "power4.out",
+    stagger: 0.12,
+    scrollTrigger: { trigger: h, start: "top 88%", toggleActions: "play none none reverse" },
+  });
+});
+
+/* --- Fade-up für übrige Inhalte ------------------------------ */
+gsap.utils.toArray(".eyebrow, .lead, p.body, .cta, .chip, .stat-card").forEach((el) => {
+  gsap.from(el, {
+    opacity: 0,
+    y: 40,
+    duration: 0.85,
+    ease: "power2.out",
+    scrollTrigger: { trigger: el, start: "top 88%", toggleActions: "play none none reverse" },
+  });
+});
+
+/* --- Produkt-Auftritt beim Laden ----------------------------- */
+function introProduct() {
+  NLV.introScale = 0;
+  gsap.to(NLV, { introScale: 1, duration: 1.4, ease: "power3.out", delay: 0.15 });
+}
+if (NLV.ready) introProduct();
+else document.addEventListener("nlv:ready", introProduct);
 
 /* --- Fortschrittsbalken oben --------------------------------- */
 gsap.to("#progress", {
