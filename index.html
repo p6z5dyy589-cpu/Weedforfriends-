@@ -83,12 +83,11 @@
     <p>© <span id="year"></span> Weed for Friends · Erstellt mit Three.js &amp; ❤️</p>
   </footer>
 
-  <!-- Three.js via Import Map (kein Build-Schritt nötig) -->
+  <!-- Three.js lokal via Import Map (kein Build-Schritt, kein CDN nötig) -->
   <script type="importmap">
   {
     "imports": {
-      "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
-      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+      "three": "./vendor/three/three.module.min.js"
     }
   }
   </script>
