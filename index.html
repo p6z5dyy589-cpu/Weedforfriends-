@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Northern Lights · Vape — ein scroll-gesteuertes 3D-Produkterlebnis." />
+  <meta name="description" content="Northern Lights · Vape — ein cineastisches 3D-Produkterlebnis." />
   <title>Northern Lights · Vape</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -12,8 +12,6 @@
 </head>
 <body>
   <div id="progress"></div>
-
-  <!-- Farbreise-Hintergrund (wandert beim Scrollen) -->
   <div id="bg"></div>
 
   <div id="loader">
@@ -21,89 +19,94 @@
     <p>Lade Produkt…</p>
   </div>
 
-  <!-- Fixierte, transparente 3D-Bühne (Produkt schwebt zentral) -->
+  <!-- Fixierte, transparente 3D-Bühne -->
   <div id="product-stage"></div>
 
   <header class="nav">
     <a href="#top" class="brand">Northern <b>Lights</b></a>
     <nav>
-      <a href="#flavour">Geschmack</a>
-      <a href="#tech">Technik</a>
-      <a href="#ritual">Ritual</a>
-      <a href="#buy">Kaufen</a>
+      <a data-go="1">Geschmack</a>
+      <a data-go="2">Technik</a>
+      <a data-go="3">Ritual</a>
+      <a data-go="4">Kaufen</a>
     </nav>
   </header>
 
-  <main id="scroll-root">
-
+  <!-- Fixierte Text-Beats, die über dem großen Produkt überblenden -->
+  <div class="beats">
     <!-- 0 · Hero -->
-    <section id="top" class="section" data-bg="#070b16">
-      <div class="callout c-top reveal">
+    <div class="beat" data-bg="#070b16">
+      <div class="b-top">
         <p class="eyebrow">Premium Vape · Limited</p>
         <h1>Northern&nbsp;<span class="grad">Lights</span></h1>
       </div>
-      <div class="callout c-bottom reveal">
-        <p class="lead">Ein Polarlicht für die Sinne. Scrolle — das Produkt läuft mit dir durch die Seite.</p>
+      <div class="b-bottom">
+        <p class="lead">Ein Polarlicht für die Sinne.</p>
         <div class="cta">
-          <a href="#buy" class="btn btn-primary">Jetzt sichern</a>
-          <a href="#flavour" class="btn btn-ghost">Entdecken</a>
+          <a href="#" class="btn btn-primary" data-go="4">Jetzt sichern</a>
+          <a href="#" class="btn btn-ghost" data-go="1">Entdecken</a>
         </div>
       </div>
-      <div class="scroll-hint">scroll ↓</div>
-    </section>
+    </div>
 
-    <!-- 1 · Geschmack — Infos rund ums Produkt -->
-    <section id="flavour" class="section" data-bg="#0a1c2a">
-      <div class="callout c-tl reveal">
+    <!-- 1 · Geschmack -->
+    <div class="beat" data-bg="#0a1c2a">
+      <div class="b-tl">
         <p class="eyebrow">Aroma</p>
         <h2>Kühle Beere,<br>klarer Abgang.</h2>
       </div>
-      <div class="chip c-tr reveal">🫐 Waldbeere</div>
-      <div class="chip c-bl reveal">❄️ Eismint</div>
-      <div class="chip c-br reveal">🌲 Zedernholz</div>
-    </section>
+      <div class="b-row">
+        <span class="chip">🫐 Waldbeere</span>
+        <span class="chip">❄️ Eismint</span>
+        <span class="chip">🌲 Zedernholz</span>
+      </div>
+    </div>
 
-    <!-- 2 · Technik — Stats rund ums Produkt -->
-    <section id="tech" class="section" data-bg="#141029">
-      <div class="callout c-tr reveal">
+    <!-- 2 · Technik -->
+    <div class="beat" data-bg="#141029">
+      <div class="b-tr">
         <p class="eyebrow">Technik</p>
         <h2>Durchdacht<br>bis ins Detail.</h2>
       </div>
-      <div class="stat-card c-tl reveal"><div class="num">600+</div><div class="lbl">Züge</div></div>
-      <div class="stat-card c-bl reveal"><div class="num">2 %</div><div class="lbl">Nikotin</div></div>
-      <div class="stat-card c-br reveal"><div class="num">100 %</div><div class="lbl">recycelbar</div></div>
-    </section>
+      <div class="b-col">
+        <div class="stat-card"><div class="num">600+</div><div class="lbl">Züge</div></div>
+        <div class="stat-card"><div class="num">2 %</div><div class="lbl">Nikotin</div></div>
+        <div class="stat-card"><div class="num">100 %</div><div class="lbl">recycelbar</div></div>
+      </div>
+    </div>
 
     <!-- 3 · Ritual -->
-    <section id="ritual" class="section" data-bg="#0d1430">
-      <div class="callout c-tl reveal">
+    <div class="beat" data-bg="#0d1430">
+      <div class="b-tl">
         <p class="eyebrow">Ritual</p>
         <h2>Dein Moment,<br>in Bewegung.</h2>
       </div>
-      <div class="callout c-br reveal">
-        <p class="body">Dreh es, betrachte es, spür die Wertigkeit — das Produkt folgt deinem Scrollen und deiner Maus.</p>
+      <div class="b-br">
+        <p class="body">Dreh es, betrachte es, spür die Wertigkeit — das Produkt folgt deinem Scrollen.</p>
       </div>
-      <div class="chip c-bl reveal">„Wie ein Stück Nordlicht." — som review</div>
-    </section>
+    </div>
 
     <!-- 4 · Kaufen -->
-    <section id="buy" class="section" data-bg="#0a2018">
-      <div class="callout c-top reveal">
+    <div class="beat" data-bg="#0a2018">
+      <div class="b-top">
         <p class="eyebrow">Verfügbar</p>
         <h2>Hol dir das <span class="grad">Polarlicht</span>.</h2>
       </div>
-      <div class="callout c-bottom reveal">
+      <div class="b-bottom">
         <p class="lead">Limitierte Auflage. Solange der Vorrat reicht.</p>
         <div class="cta">
           <a href="#" class="btn btn-primary">In den Warenkorb · 12,90 €</a>
-          <a href="#top" class="btn btn-ghost">Nach oben</a>
+          <a href="#" class="btn btn-ghost" data-go="0">Nach oben</a>
         </div>
       </div>
-    </section>
-  </main>
+    </div>
+  </div>
+
+  <!-- Unsichtbarer Abstandshalter erzeugt die Scroll-Länge der Sequenz -->
+  <div id="scroll-root"><div id="spacer"></div></div>
 
   <footer class="footer">
-    <p>© <span id="year"></span> Northern Lights · 3D-Produkterlebnis mit Three.js &amp; GSAP ScrollTrigger</p>
+    <p>© <span id="year"></span> Northern Lights · 3D-Produkterlebnis mit Three.js &amp; GSAP</p>
   </footer>
 
   <script src="./vendor/three/three.min.js"></script>

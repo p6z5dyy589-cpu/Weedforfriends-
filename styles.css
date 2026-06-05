@@ -1,6 +1,5 @@
 :root {
   --bg: #070b16;
-  --bg2: #0d1430;
   --aurora1: #5bf2c7;
   --aurora2: #6aa9ff;
   --aurora3: #b66cff;
@@ -11,7 +10,6 @@
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
-html { scroll-behavior: smooth; }
 body {
   font-family: "Poppins", system-ui, -apple-system, sans-serif;
   background: transparent;
@@ -20,27 +18,19 @@ body {
   line-height: 1.6;
 }
 
-/* Farbreise-Hintergrund: feste Ebene, deren Farbe beim Scrollen wandert */
+/* Farbreise-Hintergrund */
 #bg {
   position: fixed; inset: 0; z-index: 0; pointer-events: none;
-  background-color: var(--bg);
-  will-change: background-color;
+  background-color: var(--bg); will-change: background-color;
 }
 #bg::after {
   content: ""; position: absolute; inset: 0;
   background:
     radial-gradient(40% 30% at 20% 28%, rgba(91,242,199,0.12), transparent 70%),
     radial-gradient(45% 38% at 80% 62%, rgba(182,108,255,0.14), transparent 70%),
-    radial-gradient(50% 40% at 55% 110%, rgba(106,169,255,0.12), transparent 65%);
+    radial-gradient(50% 40% at 55% 112%, rgba(106,169,255,0.12), transparent 65%);
   mix-blend-mode: screen;
 }
-
-/* Maskierte Zeilen-Reveals für Überschriften */
-.line-mask { display: block; overflow: hidden; padding-bottom: 0.1em; }
-.line-inner { display: block; will-change: transform; }
-
-/* Zentrierte Texte über dem Produkt lesbarer machen */
-.c-top, .c-bottom { text-shadow: 0 2px 40px rgba(0, 0, 0, 0.55); }
 
 #progress {
   position: fixed; top: 0; left: 0; height: 3px; width: 100%;
@@ -57,14 +47,13 @@ body {
 #loader.hidden { opacity: 0; visibility: hidden; }
 .spinner {
   width: 46px; height: 46px; border-radius: 50%;
-  border: 3px solid rgba(255,255,255,0.12);
-  border-top-color: var(--aurora1);
+  border: 3px solid rgba(255,255,255,0.12); border-top-color: var(--aurora1);
   animation: spin 0.9s linear infinite;
 }
 #loader p { color: var(--muted); letter-spacing: .14em; text-transform: uppercase; font-size: .8rem; }
 @keyframes spin { to { transform: rotate(360deg); } }
 
-/* Fixierte 3D-Bühne — transparent, hinter dem Inhalt */
+/* Fixierte 3D-Bühne (großes Produkt) */
 #product-stage { position: fixed; inset: 0; z-index: 2; pointer-events: none; }
 #product-stage canvas { display: block; width: 100% !important; height: 100% !important; }
 
@@ -75,79 +64,64 @@ body {
   backdrop-filter: blur(10px);
   background: linear-gradient(180deg, rgba(7,11,22,0.55), transparent);
 }
-.brand { font-weight: 800; font-size: 1.15rem; letter-spacing: .02em; }
+.brand { font-weight: 800; font-size: 1.15rem; letter-spacing: .02em; color: var(--text); text-decoration: none; }
 .brand b { color: var(--aurora1); }
 .nav nav { display: flex; gap: clamp(.8rem, 2vw, 1.8rem); }
-.nav nav a { color: var(--muted); text-decoration: none; font-weight: 500; font-size: .92rem; transition: color .25s; }
+.nav nav a { color: var(--muted); font-weight: 500; font-size: .92rem; cursor: pointer; transition: color .25s; }
 .nav nav a:hover { color: var(--text); }
 
-/* Scroll-Root + Sektionen: jede Sektion ist ein Positions-Rahmen,
-   in dem die Infos RUND UM das zentrale Produkt schweben. */
-#scroll-root { position: relative; z-index: 10; }
-.section { position: relative; min-height: 100vh; }
+/* --- Beats: fixierte Text-Ebenen, die überblenden ---------- */
+.beats { position: fixed; inset: 0; z-index: 10; pointer-events: none; }
+.beat { position: absolute; inset: 0; }
+/* interaktive Elemente klickbar */
+.beat .btn, .nav nav a { pointer-events: auto; }
 
-/* Allgemeines Callout */
-.callout {
-  position: absolute;
-  max-width: min(34vw, 30rem);
-  z-index: 12;
-}
-/* Positions-Anker rund um die Bildmitte */
-.c-top    { top: 14vh; left: 50%; transform: translateX(-50%); text-align: center; max-width: min(92vw, 62rem); }
-.c-bottom { bottom: 15vh; left: 50%; transform: translateX(-50%); text-align: center; max-width: min(92vw, 42rem); }
-.c-tl { top: 18vh; left: clamp(1.2rem, 6vw, 7rem); }
-.c-tr { top: 18vh; right: clamp(1.2rem, 6vw, 7rem); text-align: right; }
-.c-bl { bottom: 20vh; left: clamp(1.2rem, 6vw, 7rem); }
-.c-br { bottom: 20vh; right: clamp(1.2rem, 6vw, 7rem); text-align: right; }
+/* Positions-Anker rund ums große, hohe Produkt */
+.beat > div { position: absolute; max-width: min(40vw, 32rem); }
+.b-top    { top: 13vh; left: 50%; transform: translateX(-50%); text-align: center; max-width: min(92vw, 64rem) !important; }
+.b-bottom { bottom: 12vh; left: 50%; transform: translateX(-50%); text-align: center; max-width: min(92vw, 44rem) !important; }
+.b-tl { top: 17vh; left: clamp(1.2rem, 6vw, 7rem); }
+.b-tr { top: 17vh; right: clamp(1.2rem, 6vw, 7rem); text-align: right; }
+.b-br { bottom: 18vh; right: clamp(1.2rem, 6vw, 7rem); text-align: right; }
+.b-row { bottom: 14vh; left: 50%; transform: translateX(-50%); display: flex; gap: .7rem; flex-wrap: wrap; justify-content: center; max-width: min(92vw, 40rem) !important; }
+.b-col { top: 50%; left: clamp(1.2rem, 6vw, 7rem); transform: translateY(-50%); display: flex; flex-direction: column; gap: 1rem; max-width: 12rem !important; }
 
 .eyebrow {
   text-transform: uppercase; letter-spacing: .28em; font-size: .72rem;
   color: var(--aurora1); font-weight: 600; margin-bottom: .8rem;
 }
-h1 { font-size: clamp(2.4rem, 7vw, 4.8rem); font-weight: 800; line-height: 1.04; letter-spacing: -0.02em; }
-h2 { font-size: clamp(1.8rem, 4.5vw, 3.2rem); font-weight: 800; line-height: 1.08; letter-spacing: -0.01em; }
+h1 { font-size: clamp(2.6rem, 8vw, 5.5rem); font-weight: 800; line-height: 1.02; letter-spacing: -0.02em; }
+h2 { font-size: clamp(2rem, 5.5vw, 3.8rem); font-weight: 800; line-height: 1.06; letter-spacing: -0.01em; }
 .grad {
   background: linear-gradient(110deg, var(--aurora1), var(--aurora2) 45%, var(--aurora3));
   -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
 }
-.lead { color: var(--muted); font-size: clamp(1rem, 1.6vw, 1.18rem); font-weight: 300; }
+.lead { color: var(--muted); font-size: clamp(1rem, 1.7vw, 1.25rem); font-weight: 300; }
 p.body { color: var(--muted); font-weight: 300; }
+.b-top, .b-bottom { text-shadow: 0 2px 40px rgba(0,0,0,0.6); }
 
-/* Schwebende Glas-Chips & Stat-Karten rund ums Produkt */
 .chip, .stat-card {
-  position: absolute; z-index: 12;
   background: var(--glass); border: 1px solid var(--glass-border);
   backdrop-filter: blur(14px); border-radius: 16px;
 }
-.chip {
-  padding: .7rem 1.1rem; font-size: .95rem; font-weight: 500;
-  box-shadow: 0 8px 30px rgba(0,0,0,0.25);
-}
-.stat-card { padding: 1rem 1.4rem; text-align: center; min-width: 7.5rem; }
+.chip { padding: .7rem 1.1rem; font-size: .95rem; font-weight: 500; }
+.stat-card { padding: 1rem 1.3rem; text-align: center; }
 .stat-card .num { font-size: 1.9rem; font-weight: 800; color: var(--text); }
 .stat-card .lbl { font-size: .74rem; color: var(--muted); text-transform: uppercase; letter-spacing: .1em; }
 
-/* Buttons */
 .cta { margin-top: 1.6rem; display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; }
 .btn {
   display: inline-block; padding: .9rem 1.9rem; border-radius: 999px;
   font-weight: 600; text-decoration: none; cursor: pointer;
-  transition: transform .2s, box-shadow .2s; pointer-events: auto;
+  transition: transform .2s, box-shadow .2s;
 }
 .btn:hover { transform: translateY(-2px); }
-.btn-primary {
-  color: #04121a;
-  background: linear-gradient(110deg, var(--aurora1), var(--aurora2));
-  box-shadow: 0 10px 30px rgba(106,169,255,0.35);
-}
+.btn-primary { color: #04121a; background: linear-gradient(110deg, var(--aurora1), var(--aurora2)); box-shadow: 0 10px 30px rgba(106,169,255,0.35); }
 .btn-ghost { color: var(--text); border: 1px solid var(--glass-border); background: var(--glass); backdrop-filter: blur(8px); }
 
-.scroll-hint {
-  position: absolute; bottom: 2.2rem; left: 50%; transform: translateX(-50%);
-  color: var(--muted); font-size: .78rem; letter-spacing: .22em; text-transform: uppercase;
-  animation: bob 1.8s ease-in-out infinite; z-index: 12;
-}
-@keyframes bob { 0%,100% { transform: translate(-50%,0); } 50% { transform: translate(-50%,8px); } }
+/* Scroll-Länge */
+#scroll-root { position: relative; z-index: 1; }
+#spacer { width: 1px; }
 
 .footer {
   position: relative; z-index: 10; text-align: center;
@@ -155,13 +129,10 @@ p.body { color: var(--muted); font-weight: 300; }
   background: rgba(5,8,18,0.7); backdrop-filter: blur(8px);
 }
 
-/* Mobil: Infos stapeln, Produkt tritt in den Hintergrund */
 @media (max-width: 760px) {
-  .section { display: flex; flex-direction: column; align-items: center; justify-content: space-between; padding: 7rem 1.2rem 5rem; gap: 1rem; }
-  .callout, .chip, .stat-card {
-    position: static; transform: none; text-align: center;
-    max-width: 90%; margin: 0 auto;
-  }
-  .c-tr, .c-br { text-align: center; }
+  .beat > div { position: absolute; max-width: 88vw !important; }
+  .b-tl, .b-tr, .b-br { left: 50%; right: auto; transform: translateX(-50%); text-align: center; }
+  .b-tl { top: 12vh; } .b-tr { top: 12vh; } .b-br { bottom: 14vh; }
+  .b-col { flex-direction: row; flex-wrap: wrap; justify-content: center; top: auto; bottom: 14vh; left: 50%; transform: translateX(-50%); max-width: 88vw !important; }
   .nav nav { gap: .8rem; font-size: .82rem; }
 }

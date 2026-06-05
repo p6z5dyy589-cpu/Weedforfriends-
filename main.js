@@ -1,51 +1,54 @@
 /* ============================================================
-   Scroll-Choreografie — GSAP ScrollTrigger steuert das
-   3D-Produkt (window.NLV) über die gesamte Seite.
+   Cineastische Sequenz — ein großes, fixiertes Produkt, über
+   das beim Scrollen Text-"Beats" überblenden. GSAP ScrollTrigger
+   scrubt eine Master-Timeline, Lenis sorgt fürs sanfte Gleiten.
    ============================================================ */
 gsap.registerPlugin(ScrollTrigger);
 
-/* --- Butterweiches Smooth-Scrolling (Lenis) -----------------
-   Verleiht der Seite das ruhige, gleitende Scroll-Gefühl wie
-   bei drinksom.eu und treibt ScrollTrigger synchron an.      */
+/* --- Lenis Smooth-Scroll, synchron zu ScrollTrigger --------- */
+let lenis;
 if (window.Lenis) {
-  const lenis = new Lenis({ lerp: 0.085, wheelMultiplier: 1.0, smoothWheel: true });
+  lenis = new Lenis({ lerp: 0.09, smoothWheel: true });
   lenis.on("scroll", ScrollTrigger.update);
-  gsap.ticker.add((time) => lenis.raf(time * 1000));
+  gsap.ticker.add((t) => lenis.raf(t * 1000));
   gsap.ticker.lagSmoothing(0);
   window.__lenis = lenis;
 }
 
 document.getElementById("year").textContent = new Date().getFullYear();
 
-// Loader ausblenden, sobald die Texturen geladen sind
 function hideLoader() {
   const l = document.getElementById("loader");
   if (l) l.classList.add("hidden");
 }
 if (window.NLV && window.NLV.ready) hideLoader();
 else document.addEventListener("nlv:ready", hideLoader);
-// Sicherheits-Fallback
 setTimeout(hideLoader, 6000);
 
 const NLV = window.NLV;
 
-/* --- Keyframes: ein Punkt pro Sektion (5 Sektionen) ----------
-   x weht von Mitte → links → rechts → links → Mitte,
-   das Produkt dreht sich kontinuierlich (rotY steigt),
-   die Skalierung pulsiert für Nähe/Distanz.            */
+/* --- Produkt-Keyframes pro Beat (groß & dominant) ----------- */
 const KEYS = [
-  { posX: 0.0,  posY: 0.05, posZ: 0.0, rotX: 0.05, rotY: 0.30, scale: 0.66 }, // 0 Hero – zentriert
-  { posX: -1.3, posY: 0.18, posZ: 0.0, rotX: 0.10, rotY: -0.60, scale: 0.50 }, // 1 links
-  { posX: 1.3,  posY: -0.15,posZ: 0.3, rotX: 0.13, rotY: 3.14, scale: 0.50 }, // 2 rechts, Rückseite
-  { posX: -1.0, posY: 0.20, posZ: 0.7, rotX: 0.08, rotY: 5.83, scale: 0.58 }, // 3 links, näher
-  { posX: 0.0,  posY: 0.0,  posZ: 0.9, rotX: 0.05, rotY: 6.58, scale: 0.70 }, // 4 CTA – zentriert, groß
+  { posX: 0.0,  posY: 0.0, posZ: 0.0, rotX: 0.05, rotY: 0.30, scale: 0.92 }, // 0 Hero
+  { posX: 0.25, posY: 0.0, posZ: 0.1, rotX: 0.10, rotY: -0.55, scale: 0.84 }, // 1 leicht gedreht
+  { posX: -0.25,posY: 0.0, posZ: 0.2, rotX: 0.12, rotY: 3.14, scale: 0.90 }, // 2 Rückseite
+  { posX: 0.20, posY: 0.0, posZ: 1.0, rotX: 0.08, rotY: 5.83, scale: 1.06 }, // 3 Zoom heran
+  { posX: 0.0,  posY: 0.0, posZ: 0.5, rotX: 0.05, rotY: 6.58, scale: 0.98 }, // 4 CTA
 ];
 
-// Startzustand = Hero-Keyframe (sonst startet die Timeline vom Default in product.js)
-gsap.set(NLV, KEYS[0]);
+const beats = gsap.utils.toArray(".beat");
+const N = beats.length;
 
-// Eine durchgehende, gescrubte Timeline über das gesamte Dokument.
-const tl = gsap.timeline({
+// Scroll-Länge der Sequenz: pro Beat ein Viewport.
+document.getElementById("spacer").style.height = N * 100 + "vh";
+
+gsap.set(NLV, KEYS[0]);
+gsap.set(beats, { autoAlpha: 0, y: 24 });
+gsap.set(beats[0], { autoAlpha: 1, y: 0 });
+gsap.set("#bg", { backgroundColor: beats[0].dataset.bg });
+
+/* --- Master-Timeline, gescrubt über die Scroll-Länge -------- */
+const master = gsap.timeline({
   scrollTrigger: {
     trigger: "#scroll-root",
     start: "top top",
@@ -54,72 +57,47 @@ const tl = gsap.timeline({
   },
 });
 
-// Sanfte Übergänge zwischen aufeinanderfolgenden Keyframes.
-for (let i = 1; i < KEYS.length; i++) {
-  tl.to(NLV, {
+for (let i = 1; i < N; i++) {
+  const at = i - 1; // jeder Übergang dauert 1 Zeiteinheit
+  // Produkt bewegt sich zum nächsten Keyframe
+  master.to(NLV, {
     posX: KEYS[i].posX, posY: KEYS[i].posY, posZ: KEYS[i].posZ,
     rotX: KEYS[i].rotX, rotY: KEYS[i].rotY, scale: KEYS[i].scale,
-    ease: "power1.inOut",
-    duration: 1,
-  });
+    ease: "power2.inOut", duration: 1,
+  }, at);
+  // Hintergrundfarbe wandert mit
+  master.to("#bg", { backgroundColor: beats[i].dataset.bg, duration: 1, ease: "power1.inOut" }, at);
+  // Beat überblenden: alter raus, neuer rein
+  master.to(beats[i - 1], { autoAlpha: 0, y: -24, duration: 0.45, ease: "power2.in" }, at);
+  master.fromTo(beats[i],
+    { autoAlpha: 0, y: 24 },
+    { autoAlpha: 1, y: 0, duration: 0.55, ease: "power2.out" },
+    at + 0.42
+  );
 }
 
-/* --- Hintergrund-Farbreise: Farbe wandert von Sektion zu Sektion --- */
-function setBg(color) {
-  gsap.to("#bg", { backgroundColor: color, duration: 1.1, ease: "power2.out", overwrite: "auto" });
-}
-gsap.utils.toArray(".section").forEach((sec) => {
-  const color = sec.dataset.bg;
-  if (!color) return;
-  ScrollTrigger.create({
-    trigger: sec,
-    start: "top center",
-    end: "bottom center",
-    onEnter: () => setBg(color),
-    onEnterBack: () => setBg(color),
-  });
+/* --- Fortschrittsbalken ------------------------------------- */
+gsap.to("#progress", {
+  scaleX: 1, ease: "none",
+  scrollTrigger: { trigger: "#scroll-root", start: "top top", end: "bottom bottom", scrub: true },
 });
-gsap.set("#bg", { backgroundColor: gsap.utils.toArray(".section")[0].dataset.bg });
 
-/* --- Maskierte Zeilen-Reveals für Überschriften -------------- */
-gsap.utils.toArray("h1, h2").forEach((h) => {
-  const parts = h.innerHTML.split(/<br\s*\/?>/i);
-  h.innerHTML = parts
-    .map((p) => `<span class="line-mask"><span class="line-inner">${p}</span></span>`)
-    .join("");
-  const lines = h.querySelectorAll(".line-inner");
-  gsap.set(lines, { yPercent: 115 });
-  gsap.to(lines, {
-    yPercent: 0,
-    duration: 1.0,
-    ease: "power4.out",
-    stagger: 0.12,
-    scrollTrigger: { trigger: h, start: "top 88%", toggleActions: "play none none reverse" },
+/* --- Navigation: zu einem Beat springen --------------------- */
+function maxScroll() { return document.documentElement.scrollHeight - window.innerHeight; }
+document.querySelectorAll("[data-go]").forEach((el) => {
+  el.addEventListener("click", (e) => {
+    e.preventDefault();
+    const i = parseInt(el.dataset.go, 10);
+    const target = (i / (N - 1)) * maxScroll();
+    if (lenis) lenis.scrollTo(target, { duration: 1.4 });
+    else window.scrollTo({ top: target, behavior: "smooth" });
   });
 });
 
-/* --- Fade-up für übrige Inhalte ------------------------------ */
-gsap.utils.toArray(".eyebrow, .lead, p.body, .cta, .chip, .stat-card").forEach((el) => {
-  gsap.from(el, {
-    opacity: 0,
-    y: 40,
-    duration: 0.85,
-    ease: "power2.out",
-    scrollTrigger: { trigger: el, start: "top 88%", toggleActions: "play none none reverse" },
-  });
-});
-
-/* --- Produkt-Auftritt beim Laden ----------------------------- */
+/* --- Produkt-Auftritt beim Laden ---------------------------- */
 function introProduct() {
   NLV.introScale = 0;
-  gsap.to(NLV, { introScale: 1, duration: 1.4, ease: "power3.out", delay: 0.15 });
+  gsap.to(NLV, { introScale: 1, duration: 1.5, ease: "power3.out", delay: 0.2 });
 }
 if (NLV.ready) introProduct();
 else document.addEventListener("nlv:ready", introProduct);
-
-/* --- Fortschrittsbalken oben --------------------------------- */
-gsap.to("#progress", {
-  scaleX: 1,
-  ease: "none",
-  scrollTrigger: { trigger: "#scroll-root", start: "top top", end: "bottom bottom", scrub: true },
-});
