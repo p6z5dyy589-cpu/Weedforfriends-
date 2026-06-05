@@ -1,0 +1,165 @@
+:root {
+  --bg: #070b16;
+  --bg2: #0d1430;
+  --aurora1: #5bf2c7;
+  --aurora2: #6aa9ff;
+  --aurora3: #b66cff;
+  --text: #eef3ff;
+  --muted: #9fb0d0;
+  --glass: rgba(18, 26, 54, 0.45);
+  --glass-border: rgba(140, 170, 255, 0.22);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: "Poppins", system-ui, -apple-system, sans-serif;
+  background:
+    radial-gradient(1200px 800px at 70% -10%, rgba(106,169,255,0.18), transparent 60%),
+    radial-gradient(1000px 700px at 10% 20%, rgba(91,242,199,0.12), transparent 55%),
+    radial-gradient(1200px 900px at 50% 120%, rgba(182,108,255,0.16), transparent 60%),
+    linear-gradient(180deg, var(--bg), var(--bg2));
+  background-attachment: fixed;
+  color: var(--text);
+  overflow-x: hidden;
+  line-height: 1.6;
+}
+
+/* Aurora-Schleier */
+body::before {
+  content: "";
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background:
+    radial-gradient(40% 30% at 20% 30%, rgba(91,242,199,0.10), transparent 70%),
+    radial-gradient(45% 35% at 80% 60%, rgba(182,108,255,0.12), transparent 70%);
+  mix-blend-mode: screen;
+}
+
+/* Fortschrittsbalken */
+#progress {
+  position: fixed; top: 0; left: 0; height: 3px; width: 100%;
+  transform: scaleX(0); transform-origin: 0 50%; z-index: 60;
+  background: linear-gradient(90deg, var(--aurora1), var(--aurora2), var(--aurora3));
+}
+
+/* Loader */
+#loader {
+  position: fixed; inset: 0; z-index: 100;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 1.1rem; background: var(--bg);
+  transition: opacity .7s ease, visibility .7s ease;
+}
+#loader.hidden { opacity: 0; visibility: hidden; }
+.spinner {
+  width: 46px; height: 46px; border-radius: 50%;
+  border: 3px solid rgba(255,255,255,0.12);
+  border-top-color: var(--aurora1);
+  animation: spin 0.9s linear infinite;
+}
+#loader p { color: var(--muted); letter-spacing: .14em; text-transform: uppercase; font-size: .8rem; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Fixierte 3D-Bühne — transparent, hinter dem Inhalt */
+#product-stage {
+  position: fixed; inset: 0; z-index: 2; pointer-events: none;
+}
+#product-stage canvas { display: block; width: 100% !important; height: 100% !important; }
+
+/* Navigation */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1.1rem clamp(1rem, 4vw, 3rem);
+  backdrop-filter: blur(10px);
+  background: linear-gradient(180deg, rgba(7,11,22,0.55), transparent);
+}
+.brand { font-weight: 800; font-size: 1.15rem; letter-spacing: .02em; }
+.brand b { color: var(--aurora1); }
+.nav nav { display: flex; gap: clamp(.8rem, 2vw, 1.8rem); }
+.nav nav a { color: var(--muted); text-decoration: none; font-weight: 500; font-size: .92rem; transition: color .25s; }
+.nav nav a:hover { color: var(--text); }
+
+/* Scroll-Root + Sektionen */
+#scroll-root { position: relative; z-index: 10; }
+.section {
+  min-height: 100vh;
+  display: flex; align-items: center;
+  padding: 6rem clamp(1.2rem, 6vw, 7rem);
+  position: relative;
+}
+.section.center { justify-content: center; text-align: center; }
+.section.left  { justify-content: flex-start; }
+.section.right { justify-content: flex-end; }
+
+/* Textblöcke */
+.block { max-width: 30rem; }
+.section.center .block { max-width: 46rem; }
+.eyebrow {
+  text-transform: uppercase; letter-spacing: .28em; font-size: .72rem;
+  color: var(--aurora1); font-weight: 600; margin-bottom: 1rem;
+}
+h1 {
+  font-size: clamp(2.6rem, 8vw, 6rem); font-weight: 800; line-height: 1.02;
+  letter-spacing: -0.02em;
+}
+h2 { font-size: clamp(2rem, 5vw, 3.4rem); font-weight: 800; line-height: 1.08; letter-spacing: -0.01em; }
+.grad {
+  background: linear-gradient(110deg, var(--aurora1), var(--aurora2) 45%, var(--aurora3));
+  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+}
+.lead { margin-top: 1.2rem; color: var(--muted); font-size: clamp(1rem, 1.6vw, 1.18rem); font-weight: 300; }
+p.body { margin-top: 1rem; color: var(--muted); font-weight: 300; }
+
+/* Glas-Karten / Stats */
+.card {
+  margin-top: 1.6rem; padding: 1.4rem 1.6rem;
+  background: var(--glass); border: 1px solid var(--glass-border);
+  border-radius: 20px; backdrop-filter: blur(14px);
+}
+.stats { display: flex; gap: 1.8rem; margin-top: 1.8rem; flex-wrap: wrap; }
+.stat .num { font-size: 1.9rem; font-weight: 800; color: var(--text); }
+.stat .lbl { font-size: .78rem; color: var(--muted); text-transform: uppercase; letter-spacing: .1em; }
+
+.tags { display: flex; gap: .6rem; flex-wrap: wrap; margin-top: 1.4rem; }
+.tag {
+  padding: .45rem .9rem; border-radius: 999px; font-size: .82rem;
+  border: 1px solid var(--glass-border); background: var(--glass); color: var(--muted);
+}
+
+/* Buttons */
+.cta { margin-top: 2rem; display: flex; gap: 1rem; flex-wrap: wrap; }
+.section.center .cta { justify-content: center; }
+.btn {
+  display: inline-block; padding: .9rem 1.9rem; border-radius: 999px;
+  font-weight: 600; text-decoration: none; cursor: pointer;
+  transition: transform .2s, box-shadow .2s; pointer-events: auto;
+}
+.btn:hover { transform: translateY(-2px); }
+.btn-primary {
+  color: #04121a;
+  background: linear-gradient(110deg, var(--aurora1), var(--aurora2));
+  box-shadow: 0 10px 30px rgba(106,169,255,0.35);
+}
+.btn-ghost { color: var(--text); border: 1px solid var(--glass-border); background: var(--glass); backdrop-filter: blur(8px); }
+
+.scroll-hint {
+  position: absolute; bottom: 2.2rem; left: 50%; transform: translateX(-50%);
+  color: var(--muted); font-size: .78rem; letter-spacing: .22em; text-transform: uppercase;
+  animation: bob 1.8s ease-in-out infinite;
+}
+@keyframes bob { 0%,100% { transform: translate(-50%,0); } 50% { transform: translate(-50%,8px); } }
+
+.footer {
+  position: relative; z-index: 10; text-align: center;
+  padding: 2.5rem 1rem; color: var(--muted); font-size: .9rem;
+  background: rgba(5,8,18,0.7); backdrop-filter: blur(8px);
+}
+
+/* Auf kleinen Screens: Produkt tritt hinter den Text zurück */
+@media (max-width: 720px) {
+  .section { padding: 6rem 1.2rem; }
+  .section.left, .section.right { justify-content: center; text-align: center; }
+  .block { max-width: 100%; }
+  .stats { justify-content: center; }
+  .nav nav { gap: .8rem; font-size: .82rem; }
+}
