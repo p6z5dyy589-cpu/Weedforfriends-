@@ -60,7 +60,19 @@ drizzle/           Schema und Migrationen
 - Fotos: echte Bildtyp-Prüfung (Magic Bytes), max. 8 MB, firmengebunden, im Browser
   verkleinert (entfernt dabei EXIF/GPS).
 
-## Einrichtung
+## Einrichtung auf dem Mac (empfohlen)
+
+```bash
+git clone -b claude/3d-website-xTqWL https://github.com/p6z5dyy589-cpu/Weedforfriends-.git fertigung-einfach
+cd fertigung-einfach
+bash scripts/setup-mac.sh     # installiert Node, pnpm, MySQL, legt DB + .env an, fragt den ersten Koordinator ab
+pnpm dev                      # http://localhost:3000
+```
+
+Voraussetzung: [Homebrew](https://brew.sh). Die Zugangsdaten landen in `.env` (wird nicht
+committet). Das iPhone im selben WLAN erreicht die App über die IP des Mac (zeigt das Skript an).
+
+## Einrichtung (allgemein)
 
 ```bash
 pnpm install
