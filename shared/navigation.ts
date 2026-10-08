@@ -32,7 +32,7 @@ export const NAV_ITEMS: readonly NavItem[] = [
   { group: "orderDelivery", path: "/packen", labelKey: "nav.item.packing", roles: ["pack", "shipping", "coordinator"] },
 
   { group: "planningWarehouse", path: "/planung", labelKey: "nav.item.planning", roles: ["planner", "coordinator"], coordination: true },
-  { group: "planningWarehouse", path: "/aufgabe-neu", labelKey: "nav.item.newTask", roles: ["planner", "coordinator", "reviewer"], coordination: true },
+  { group: "planningWarehouse", path: "/aufgabe-neu", labelKey: "nav.item.newTask", roles: ["planner", "coordinator", "reviewer", "incoming"], coordination: true },
   { group: "planningWarehouse", path: "/wareneingang", labelKey: "nav.item.incoming", roles: ["incoming", "coordinator"] },
   { group: "planningWarehouse", path: "/lagerkarte", labelKey: "nav.item.warehouseMap", roles: "all" },
 

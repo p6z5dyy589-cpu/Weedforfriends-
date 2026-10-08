@@ -44,6 +44,7 @@ export const tasks = defineMessages(
 
     "action.openTask": "Aufgabe öffnen",
     "action.openTask.production": "Fertigung öffnen",
+    "action.openTask.packaging": "Abpackung öffnen",
     "action.continue": "Fortsetzen",
     "action.viewDetails": "Details ansehen",
     "action.acceptHandover": "Ware am Packplatz annehmen",
@@ -54,6 +55,7 @@ export const tasks = defineMessages(
     "home.now": "Jetzt tun",
     "home.next": "Danach",
     "home.waiting": "Warte auf Vincent",
+    "home.waitingGeneric": "Warten – kein Eingriff nötig",
     "home.labelsReady": "Etiketten bereit",
     "home.clarify": "Stopp – Klärung",
     "home.empty": "Gerade ist keine Arbeit für dich eingetragen.",
@@ -116,6 +118,7 @@ export const tasks = defineMessages(
     "task.review.odooHint": "Produkte, Lots, Mengen und Einheiten gegen Odoo prüfen. Diese Freigabe ist nur lokal.",
     "task.review.deviation": "Was abweicht",
     "task.review.approve": "Lokal freigeben",
+    "task.review.correct": "Angaben korrigieren",
     "task.review.return": "Zurückgeben",
     "task.review.note": "Begründung",
 
@@ -204,6 +207,7 @@ export const tasks = defineMessages(
 
     "action.openTask": "Otevřít úkol",
     "action.openTask.production": "Otevřít výrobu",
+    "action.openTask.packaging": "Otevřít balení",
     "action.continue": "Pokračovat",
     "action.viewDetails": "Zobrazit detaily",
     "action.acceptHandover": "Převzít zboží na balicím místě",
@@ -214,6 +218,7 @@ export const tasks = defineMessages(
     "home.now": "Udělat teď",
     "home.next": "Potom",
     "home.waiting": "Čekám na Vincenta",
+    "home.waitingGeneric": "Čekání – není nutný zásah",
     "home.labelsReady": "Etikety připraveny",
     "home.clarify": "Stop – vyjasnit",
     "home.empty": "Momentálně pro tebe není zadaná žádná práce.",
@@ -276,6 +281,7 @@ export const tasks = defineMessages(
     "task.review.odooHint": "Zkontrolovat produkty, šarže, množství a jednotky proti Odoo. Toto schválení je jen lokální.",
     "task.review.deviation": "Co se liší",
     "task.review.approve": "Lokálně schválit",
+    "task.review.correct": "Opravit údaje",
     "task.review.return": "Vrátit",
     "task.review.note": "Zdůvodnění",
 

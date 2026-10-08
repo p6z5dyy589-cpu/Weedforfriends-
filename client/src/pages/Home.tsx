@@ -44,12 +44,12 @@ export default function Home() {
       {o.next.length > 0 && (
         <Section title={t("home.next")}>
           {o.next.slice(0, 2).map((c) => (
-            <WorkCard key={c.id} card={c} />
+            <WorkCard key={c.id} card={c} quiet />
           ))}
         </Section>
       )}
       {o.waiting.length > 0 && (
-        <Section title={t("home.waiting")}>
+        <Section title={o.waiting.every((c) => c.status === "review") ? t("home.waiting") : t("home.waitingGeneric")}>
           {o.waiting.map((c) => (
             <WorkCard key={c.id} card={c} />
           ))}

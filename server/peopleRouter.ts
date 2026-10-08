@@ -16,7 +16,7 @@ export const peopleRouter = router({
   directory: kioskProcedure.query(async ({ ctx }): Promise<PersonSummary[]> => {
     const people = await companyPeople(ctx.store, ctx.companyId);
     return people
-      .map((u) => ({ id: u.id, displayName: u.displayName, roles: rolesIn(u, ctx.companyId) }))
+      .map((u) => ({ id: u.id, displayName: u.displayName, loginName: u.loginName, roles: rolesIn(u, ctx.companyId) }))
       .sort((a, b) => a.displayName.localeCompare(b.displayName));
   }),
 

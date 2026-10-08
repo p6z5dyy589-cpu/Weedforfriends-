@@ -34,7 +34,11 @@ export function interpolate(text: string, vars?: Record<string, string | number>
 }
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
-  const [language, setLanguageState] = useState<Language>(initialLanguage);
+  const [language, setLanguageState] = useState<Language>(() => {
+    const lang = initialLanguage();
+    document.documentElement.lang = lang;
+    return lang;
+  });
   const value = useMemo<LanguageValue>(() => {
     const dict = dictionaries[language];
     return {

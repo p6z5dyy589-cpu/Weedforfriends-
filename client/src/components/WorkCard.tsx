@@ -6,20 +6,25 @@ import type { TranslationKey } from "@/i18n";
 import { StatusBadge } from "./ui/StatusBadge";
 
 export function quantityText(t: (k: TranslationKey) => string, q: number | null, unit: string): string {
-  return q === null ? "" : `${q.toLocaleString()} ${t(`unit.${unit}` as TranslationKey)}`;
+  const locale = document.documentElement.lang === "cs" ? "cs-CZ" : "de-DE";
+  return q === null ? "" : `${q.toLocaleString(locale)} ${t(`unit.${unit}` as TranslationKey)}`;
 }
 
 /**
  * Muster A - Arbeitskarte: status, product, company · reference · quantity,
  * responsible, ONE big action and "Etwas passt nicht" as the safe way out.
  */
-export function WorkCard({ card, emphasis }: { card: TodayCard; emphasis?: boolean }) {
+export function WorkCard({ card, emphasis, quiet }: { card: TodayCard; emphasis?: boolean; quiet?: boolean }) {
   const { t } = useLanguage();
   const me = useMe();
   const company = me.companies.find((c) => c.id === card.companyId)?.name ?? "";
   const href = `/aufgabe/${card.id}`;
   const actionKey: TranslationKey =
-    card.action === "openTask" && card.processType === "production" ? "action.openTask.production" : (`action.${card.action}` as TranslationKey);
+    card.action === "openTask" && card.processType === "production"
+      ? "action.openTask.production"
+      : card.action === "openTask" && card.processType === "packaging"
+        ? "action.openTask.packaging"
+        : (`action.${card.action}` as TranslationKey);
   const waitingText =
     card.waitingFor === "dependency" ? t("home.waitingDependency") : card.status === "review" ? t("home.waitingReview") : card.status === "handover_offered" ? t("home.waitingHandover") : null;
   const isStop = card.status === "blocked";
@@ -42,7 +47,7 @@ export function WorkCard({ card, emphasis }: { card: TodayCard; emphasis?: boole
       <Link
         href={href}
         className={`flex min-h-12 items-center justify-center rounded-xl px-5 text-base font-semibold ${
-          isStop ? "border-2 border-stop text-stop" : card.action === "viewDetails" ? "border border-slate-300 text-slate-900" : "bg-brand text-white"
+          isStop ? "border-2 border-stop text-stop" : card.action === "viewDetails" || quiet ? "border border-slate-300 text-slate-900" : "bg-brand text-white"
         }`}
       >
         {t(actionKey)}
