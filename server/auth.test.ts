@@ -6,7 +6,7 @@ import { hashToken } from "./auth/pin";
 describe("kiosk login", () => {
   it("logs in with correct PIN and returns the first granted company", async () => {
     const h = await createHarness();
-    await h.addUser({ loginName: "ana", pin: "1234", companyIds: [2, 1] });
+    await h.addUser({ loginName: "ana", pin: "1234", grants: [[2, ["production"]], [1, ["production"]]] });
     const c = h.client();
     await c.api.auth.login({ loginName: "ana", pin: "1234" });
     expect(c.jar.token).toBeTruthy();
@@ -17,7 +17,7 @@ describe("kiosk login", () => {
 
   it("stores only the token hash, never the token", async () => {
     const h = await createHarness();
-    await h.addUser({ loginName: "ana", pin: "1234", companyIds: [1] });
+    await h.addUser({ loginName: "ana", pin: "1234", grants: [[1, ["production"]]] });
     const c = h.client();
     await c.api.auth.login({ loginName: "ana", pin: "1234" });
     expect(h.store.sessions.has(c.jar.token!)).toBe(false);
@@ -26,9 +26,9 @@ describe("kiosk login", () => {
 
   it("gives the same error for wrong PIN, unknown user, inactive user and no company", async () => {
     const h = await createHarness();
-    await h.addUser({ loginName: "ana", pin: "1234", companyIds: [1] });
-    await h.addUser({ loginName: "old", pin: "1234", companyIds: [1], active: false });
-    await h.addUser({ loginName: "none", pin: "1234", companyIds: [] });
+    await h.addUser({ loginName: "ana", pin: "1234", grants: [[1, ["production"]]] });
+    await h.addUser({ loginName: "old", pin: "1234", grants: [[1, ["production"]]], active: false });
+    await h.addUser({ loginName: "none", pin: "1234", grants: [] });
     const cases = [
       { loginName: "ana", pin: "9999" },
       { loginName: "ghost", pin: "1234" },
@@ -44,7 +44,7 @@ describe("kiosk login", () => {
 
   it("blocks after repeated failures, even with the correct PIN", async () => {
     const h = await createHarness();
-    await h.addUser({ loginName: "ana", pin: "1234", companyIds: [1] });
+    await h.addUser({ loginName: "ana", pin: "1234", grants: [[1, ["production"]]] });
     const c = h.client();
     for (let i = 0; i < 3; i++) {
       await expect(c.api.auth.login({ loginName: "ana", pin: "0000" })).rejects.toMatchObject({ code: "UNAUTHORIZED" });
@@ -62,7 +62,7 @@ describe("kiosk login", () => {
 
   it("expires sessions and requires login without a cookie", async () => {
     const h = await createHarness();
-    await h.addUser({ loginName: "ana", pin: "1234", companyIds: [1] });
+    await h.addUser({ loginName: "ana", pin: "1234", grants: [[1, ["production"]]] });
     const c = h.client();
     await expect(c.api.auth.me()).rejects.toMatchObject({ code: "UNAUTHORIZED" });
     await c.api.auth.login({ loginName: "ana", pin: "1234" });
@@ -73,7 +73,7 @@ describe("kiosk login", () => {
 
   it("invalidates the session when the user is deactivated", async () => {
     const h = await createHarness();
-    const id = await h.addUser({ loginName: "ana", pin: "1234", companyIds: [1] });
+    const id = await h.addUser({ loginName: "ana", pin: "1234", grants: [[1, ["production"]]] });
     const c = h.client();
     await c.api.auth.login({ loginName: "ana", pin: "1234" });
     h.store.users.get(id)!.active = false;
@@ -82,7 +82,7 @@ describe("kiosk login", () => {
 
   it("logout deletes the session", async () => {
     const h = await createHarness();
-    await h.addUser({ loginName: "ana", pin: "1234", companyIds: [1] });
+    await h.addUser({ loginName: "ana", pin: "1234", grants: [[1, ["production"]]] });
     const c = h.client();
     await c.api.auth.login({ loginName: "ana", pin: "1234" });
     const token = c.jar.token!;

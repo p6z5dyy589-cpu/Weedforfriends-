@@ -1,6 +1,5 @@
 import { createContext, useContext, useMemo, useState, type ReactNode } from "react";
-import { de, type TranslationKey } from "@/i18n/de";
-import { cs } from "@/i18n/cs";
+import { cs, de, type TranslationKey } from "@/i18n";
 
 export const LANGUAGES = ["de", "cs"] as const;
 export type Language = (typeof LANGUAGES)[number];
@@ -18,18 +17,27 @@ function initialLanguage(): Language {
   return "de";
 }
 
+export type Translate = (key: TranslationKey, vars?: Record<string, string | number>) => string;
+
 interface LanguageValue {
   language: Language;
   setLanguage: (lang: Language) => void;
-  t: (key: TranslationKey) => string;
+  t: Translate;
+  /** Translates a dynamic key, falling back when it does not exist. */
+  tx: (key: string, fallback: TranslationKey) => string;
 }
 
 const LanguageContext = createContext<LanguageValue | null>(null);
 
+export function interpolate(text: string, vars?: Record<string, string | number>): string {
+  return vars ? text.replace(/\{(\w+)\}/g, (m, k: string) => (k in vars ? String(vars[k]) : m)) : text;
+}
+
 export function LanguageProvider({ children }: { children: ReactNode }) {
   const [language, setLanguageState] = useState<Language>(initialLanguage);
-  const value = useMemo<LanguageValue>(
-    () => ({
+  const value = useMemo<LanguageValue>(() => {
+    const dict = dictionaries[language];
+    return {
       language,
       setLanguage: (lang) => {
         setLanguageState(lang);
@@ -40,10 +48,10 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
         }
         document.documentElement.lang = lang;
       },
-      t: (key) => dictionaries[language][key],
-    }),
-    [language],
-  );
+      t: (key, vars) => interpolate(dict[key], vars),
+      tx: (key, fallback) => (key in dict ? dict[key as TranslationKey] : dict[fallback]),
+    };
+  }, [language]);
   return <LanguageContext.Provider value={value}>{children}</LanguageContext.Provider>;
 }
 

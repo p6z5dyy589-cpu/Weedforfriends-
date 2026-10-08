@@ -2,15 +2,17 @@ import path from "node:path";
 import express from "express";
 import { drizzle } from "drizzle-orm/mysql2";
 import { createApp } from "./app";
-import { MySqlAuthStore } from "./auth/mysqlStore";
+import { MySqlStore } from "./store/mysqlStore";
+import { DiskFileStore } from "./files/fileStore";
 
 const databaseUrl = process.env.DATABASE_URL;
 if (!databaseUrl) {
   console.error("DATABASE_URL fehlt.");
   process.exit(1);
 }
+const uploadDir = process.env.UPLOAD_DIR ?? path.resolve(process.cwd(), "uploads");
 
-const app = createApp(new MySqlAuthStore(drizzle(databaseUrl)));
+const app = createApp(new MySqlStore(drizzle(databaseUrl)), new DiskFileStore(uploadDir));
 const port = Number(process.env.PORT ?? 3000);
 
 if (process.env.NODE_ENV === "production") {

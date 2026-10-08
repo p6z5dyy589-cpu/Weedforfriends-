@@ -10,7 +10,10 @@
     "check": "tsc --noEmit",
     "test": "vitest run",
     "test:live": "ALLOW_LIVE_TESTS=1 vitest run --config vitest.live.config.ts",
-    "db:generate": "drizzle-kit generate"
+    "db:generate": "drizzle-kit generate",
+    "test:db": "vitest run --config vitest.db.config.ts",
+    "admin:create-coordinator": "tsx server/cli/createCoordinator.ts",
+    "db:migrate": "tsx server/cli/migrate.ts"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.2.0",

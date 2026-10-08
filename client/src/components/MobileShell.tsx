@@ -1,30 +1,35 @@
 import type { ReactNode } from "react";
+import { Bell, MessageCircle } from "lucide-react";
+import { Link } from "wouter";
 import { useQueryClient } from "@tanstack/react-query";
 import { trpc } from "@/lib/trpc";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useMe } from "@/hooks/useMe";
 import KioskQuickMenu from "./KioskQuickMenu";
-import type { Role } from "@shared/roles";
 
-export interface Me {
-  displayName: string;
-  role: Role;
-  activeCompanyId: number;
-  companies: { id: number; name: string }[];
+function Badge({ count }: { count: number | undefined }) {
+  if (!count) return null;
+  return (
+    <span className="absolute -right-0.5 -top-0.5 min-w-5 rounded-full bg-stop px-1 text-center text-xs font-bold leading-5 text-white">{count > 99 ? "99+" : count}</span>
+  );
 }
 
-export default function MobileShell({ me, children }: { me: Me; children: ReactNode }) {
+export default function MobileShell({ children }: { children: ReactNode }) {
   const { t } = useLanguage();
+  const me = useMe();
   const queryClient = useQueryClient();
   const switchCompany = trpc.auth.switchCompany.useMutation({
     // Drop every cached query so no data of the previous company survives.
     onSuccess: () => queryClient.resetQueries(),
   });
+  const unreadNotes = trpc.notifications.unreadCount.useQuery(undefined, { refetchInterval: 30_000 });
+  const unreadChat = trpc.chat.unreadTotal.useQuery(undefined, { refetchInterval: 30_000 });
   const active = me.companies.find((c) => c.id === me.activeCompanyId);
 
   return (
     <div className="flex min-h-full flex-col">
-      <header className="sticky top-0 z-10 flex items-center gap-3 bg-brand px-4 py-2 text-white pt-[max(0.5rem,env(safe-area-inset-top))]">
-        <KioskQuickMenu role={me.role} />
+      <header className="sticky top-0 z-10 flex items-center gap-2 bg-brand px-3 pb-2 pt-[max(0.5rem,env(safe-area-inset-top))] text-white">
+        <KioskQuickMenu />
         <div className="min-w-0 flex-1">
           <p className="truncate text-sm opacity-80">{me.displayName}</p>
           {me.companies.length > 1 ? (
@@ -47,8 +52,16 @@ export default function MobileShell({ me, children }: { me: Me; children: ReactN
             <p className="font-semibold">{active?.name}</p>
           )}
         </div>
+        <Link href="/chat" aria-label={t("menu.chat")} className="relative flex size-11 items-center justify-center rounded-lg hover:bg-white/10">
+          <MessageCircle aria-hidden />
+          <Badge count={unreadChat.data} />
+        </Link>
+        <Link href="/nachrichten" aria-label={t("menu.notifications")} className="relative flex size-11 items-center justify-center rounded-lg hover:bg-white/10">
+          <Bell aria-hidden />
+          <Badge count={unreadNotes.data} />
+        </Link>
       </header>
-      <main className="mx-auto w-full max-w-2xl flex-1 p-4">{children}</main>
+      <main className="mx-auto w-full max-w-2xl flex-1 p-4 pb-[max(1rem,env(safe-area-inset-bottom))]">{children}</main>
     </div>
   );
 }

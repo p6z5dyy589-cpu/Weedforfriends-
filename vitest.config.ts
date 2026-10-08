@@ -11,7 +11,7 @@ export default defineConfig({
   },
   test: {
     include: ["server/**/*.test.ts", "shared/**/*.test.ts", "client/src/**/*.test.{ts,tsx}"],
-    exclude: ["**/*.live.test.ts", "node_modules/**"],
+    exclude: ["**/*.live.test.ts", "**/*.db.test.ts", "node_modules/**"],
     environment: "node",
   },
 });

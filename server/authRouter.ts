@@ -18,7 +18,7 @@ export const authRouter = router({
     }
     const user = await ctx.store.findUserByLoginName(input.loginName);
     const ok = user !== null && user.active && (await verifyPin(input.pin, user.pinHash));
-    const firstCompany = user?.companyIds[0];
+    const firstCompany = user?.grants[0]?.companyId;
     if (!ok || firstCompany === undefined) {
       ctx.limiter.recordFailure(limitKey);
       // Same error for unknown user, wrong PIN, inactive or no company grant.
@@ -44,10 +44,11 @@ export const authRouter = router({
   }),
 
   me: kioskProcedure.query(({ ctx }) => ({
+    id: ctx.user.id,
     displayName: ctx.user.displayName,
-    role: ctx.user.role,
+    roles: ctx.roles,
     activeCompanyId: ctx.companyId,
-    companies: COMPANIES.filter((c) => ctx.user.companyIds.includes(c.id)).map((c) => ({
+    companies: COMPANIES.filter((c) => ctx.user.grants.some((g) => g.companyId === c.id)).map((c) => ({
       id: c.id,
       name: c.name,
     })),
@@ -56,7 +57,7 @@ export const authRouter = router({
   switchCompany: kioskProcedure
     .input(z.object({ companyId: z.number().int() }))
     .mutation(async ({ ctx, input }) => {
-      if (!isCompanyId(input.companyId) || !ctx.user.companyIds.includes(input.companyId)) {
+      if (!isCompanyId(input.companyId) || !ctx.user.grants.some((g) => g.companyId === input.companyId)) {
         throw new TRPCError({ code: "FORBIDDEN" });
       }
       await ctx.store.updateSessionCompany(ctx.tokenHash, input.companyId);
